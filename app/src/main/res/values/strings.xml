@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Price Hunter</string>
+    <string name="web_client_id">893374777150-jissom2h27n90146gbhg4u9rcc3ke146.apps.googleusercontent.com</string>
+    <string name="generic_error">An error ocurred</string>
+    <string name="email_error">Invalid email</string>
+    <string name="empty_password_error">The password cannot be empty</string>
+</resources>

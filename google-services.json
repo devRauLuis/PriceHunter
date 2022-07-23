@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "893374777150",
+    "project_id": "price-hunter-7e537",
+    "storage_bucket": "price-hunter-7e537.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893374777150:android:b893c02124e949691f4e6f",
+        "android_client_info": {
+          "package_name": "com.pineapple.pricehunter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893374777150-19hn8d0fc3e41ro8brm1gjrtk6m0oq64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pineapple.pricehunter",
+            "certificate_hash": "67cb148094ed437f5a192a4de5fafe758874c8ae"
+          }
+        },
+        {
+          "client_id": "893374777150-jissom2h27n90146gbhg4u9rcc3ke146.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKIIbqPVBKawXwkxs8PP8aOoQjP4XelTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893374777150-jissom2h27n90146gbhg4u9rcc3ke146.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
