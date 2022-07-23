@@ -13,10 +13,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.devaruluis.exchanges.ui.theme.PriceHunterTheme
 import com.pineapple.pricehunter.common.snackbar.SnackbarManager
-import com.pineapple.pricehunter.ui.navigation.PriceHunterNavHost
+import com.pineapple.pricehunter.ui.navigation.Routes
+import com.pineapple.pricehunter.ui.navigation.priceHunterGraph
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -43,10 +45,11 @@ fun PriceHunterApp() {
                 },
                 scaffoldState = appState.scaffoldState
             ) { innerPadding ->
-                PriceHunterNavHost(
+                NavHost(
                     navController = appState.navController,
+                    startDestination = Routes.Home.name,
                     modifier = Modifier.padding(innerPadding)
-                )
+                ) { priceHunterGraph(appState) }
             }
 
         }
