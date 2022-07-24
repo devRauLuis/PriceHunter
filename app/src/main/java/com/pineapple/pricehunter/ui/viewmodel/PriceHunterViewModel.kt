@@ -1,7 +1,6 @@
 package com.pineapple.pricehunter.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.makeitso.model.service.LogService
 import com.pineapple.pricehunter.common.snackbar.SnackbarManager
 import com.pineapple.pricehunter.common.snackbar.SnackbarMessage.Companion.toSnackbarMessage
 import kotlinx.coroutines.CoroutineExceptionHandler
