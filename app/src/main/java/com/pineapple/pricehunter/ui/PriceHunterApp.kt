@@ -1,7 +1,6 @@
-package com.pineapple.pricehunter
+package com.pineapple.pricehunter.ui
 
 import android.content.res.Resources
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -26,11 +25,8 @@ fun PriceHunterApp() {
     PriceHunterTheme {
         // A surface container using the 'background' color from the theme
         Surface(
-            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            val scaffoldState = rememberScaffoldState()
-
             val appState = rememberAppState()
 
             Scaffold(
@@ -43,6 +39,7 @@ fun PriceHunterApp() {
                         }
                     )
                 },
+
                 scaffoldState = appState.scaffoldState
             ) { innerPadding ->
                 NavHost(

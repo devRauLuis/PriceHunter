@@ -1,4 +1,4 @@
-package com.pineapple.pricehunter
+package com.pineapple.pricehunter.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.pineapple.pricehunter
+package com.pineapple.pricehunter.ui
 
 import android.content.res.Resources
 import androidx.compose.material.ScaffoldState
