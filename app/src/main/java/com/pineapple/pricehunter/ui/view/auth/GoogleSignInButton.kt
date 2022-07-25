@@ -25,11 +25,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.pineapple.pricehunter.common.utils.LoadingState
-import com.pineapple.pricehunter.ui.view.auth.LoginViewModel
+import com.pineapple.pricehunter.ui.viewmodel.AuthViewModel
 
 @Composable
 fun GoogleSignInButton(
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by viewModel.loadingState.collectAsState()
 

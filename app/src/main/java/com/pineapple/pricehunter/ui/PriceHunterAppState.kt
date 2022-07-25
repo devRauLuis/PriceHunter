@@ -17,6 +17,8 @@ limitations under the License.
 package com.pineapple.pricehunter.ui
 
 import android.content.res.Resources
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
@@ -27,9 +29,11 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 @Stable
-class PriceHunterAppState(
+@OptIn(ExperimentalMaterial3Api::class)
+class PriceHunterAppState constructor(
     val snackbarHostState: SnackbarHostState,
     val navController: NavHostController,
+    val drawerState: DrawerState,
     private val snackbarManager: SnackbarManager,
     private val resources: Resources,
     coroutineScope: CoroutineScope
