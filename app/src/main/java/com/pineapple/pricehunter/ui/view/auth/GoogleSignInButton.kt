@@ -3,12 +3,7 @@ package com.pineapple.pricehunter.ui.view
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,6 +22,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.pineapple.pricehunter.R
 import com.pineapple.pricehunter.common.utils.LoadingState
+import com.pineapple.pricehunter.ui.theme.googleSmall
 import com.pineapple.pricehunter.ui.view.auth.LoginViewModel
 
 @Composable
@@ -56,25 +52,24 @@ fun GoogleSignInButton(
 
     val context = LocalContext.current
     val token = stringResource(com.pineapple.pricehunter.R.string.default_web_client_id)
+    val onGoogleSignInClick = {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(token)
+            .requestEmail()
+            .build()
 
-    OutlinedButton(
-        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
+        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+        launcher.launch(googleSignInClient.signInIntent)
+    }
+    ElevatedButton(
+//        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-        onClick = {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(token)
-                .requestEmail()
-                .build()
-
-            val googleSignInClient = GoogleSignIn.getClient(context, gso)
-            launcher.launch(googleSignInClient.signInIntent)
-        },
+        onClick = onGoogleSignInClick,
         content = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
                     Icon(
@@ -82,16 +77,16 @@ fun GoogleSignInButton(
                         painter = painterResource(id = R.drawable.google_ic),
                         contentDescription = null,
                     )
-                    Text(
-                        style = MaterialTheme.typography.displayMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        text = "Google"
-                    )
-                    Icon(
-                        tint = Color.Transparent,
-                        imageVector = Icons.Default.MailOutline,
-                        contentDescription = null,
-                    )
+                    Row(
+                        modifier = Modifier.padding(start = 16.dp),
+                    ) {
+                        Text("Sign in with ")
+                        Text(
+                            style = googleSmall,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            text = "Google"
+                        )
+                    }
                 }
             )
         }
