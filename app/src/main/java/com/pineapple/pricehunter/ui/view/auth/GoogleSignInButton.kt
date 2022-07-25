@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.pineapple.pricehunter.R
 import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.ui.view.auth.LoginViewModel
 
@@ -75,11 +77,11 @@ fun GoogleSignInButton(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
-//                                Icon(
-//                                    tint = Color.Unspecified,
-//                                    painter = painterResource(id = R.drawable.googleg_standard_color_18),
-//                                    contentDescription = null,
-//                                )
+                    Icon(
+                        tint = Color.Unspecified,
+                        painter = painterResource(id = R.drawable.google_ic),
+                        contentDescription = null,
+                    )
                     Text(
                         style = MaterialTheme.typography.displayMedium,
                         color = MaterialTheme.colorScheme.onSurface,
