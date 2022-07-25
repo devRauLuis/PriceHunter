@@ -1,25 +1,38 @@
 package com.pineapple.pricehunter.ui.view
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.pineapple.pricehunter.ui.navigation.Routes
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun HomeScreen(navigate: (String) -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Welcome to Price Hunter")
-        Button(onClick = { navigate(Routes.Login.name) }) {
-            Text(text = "Login")
+       
+        Box(modifier = Modifier.padding(top = 15.dp)) {
+            if (Firebase.auth.currentUser == null)
+                GoogleSignInButton()
+            else
+                Row() {
+                    Text("Hi, ")
+                    Text(
+                        "${Firebase.auth.currentUser!!.displayName}",
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                }
         }
     }
 }

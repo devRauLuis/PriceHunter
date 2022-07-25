@@ -3,11 +3,16 @@ package com.pineapple.pricehunter.ui.view
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.runtime.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +28,8 @@ import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.ui.view.auth.LoginViewModel
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(), navigate: (String) -> Unit
+fun GoogleSignInButton(
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.loadingState.collectAsState()
 
@@ -43,60 +48,54 @@ fun LoginScreen(
 
     if (state.status == LoadingState.Status.RUNNING) {
         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+
     }
-    Column(
+
+
+    val context = LocalContext.current
+    val token = stringResource(com.pineapple.pricehunter.R.string.default_web_client_id)
+
+    OutlinedButton(
+        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .fillMaxWidth()
+            .height(50.dp),
+        onClick = {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(token)
+                .requestEmail()
+                .build()
 
-        ) {
-
-        val context = LocalContext.current
-        val token = stringResource(com.pineapple.pricehunter.R.string.default_web_client_id)
-
-        OutlinedButton(
-            border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            onClick = {
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(token)
-                    .requestEmail()
-                    .build()
-
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
-            },
-            content = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    content = {
+            val googleSignInClient = GoogleSignIn.getClient(context, gso)
+            launcher.launch(googleSignInClient.signInIntent)
+        },
+        content = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                content = {
 //                                Icon(
 //                                    tint = Color.Unspecified,
 //                                    painter = painterResource(id = R.drawable.googleg_standard_color_18),
 //                                    contentDescription = null,
 //                                )
-                        Text(
-                            style = MaterialTheme.typography.button,
-                            color = MaterialTheme.colors.onSurface,
-                            text = "Google"
-                        )
-                        Icon(
-                            tint = Color.Transparent,
-                            imageVector = Icons.Default.MailOutline,
-                            contentDescription = null,
-                        )
-                    }
-                )
-            }
-        )
+                    Text(
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = "Google"
+                    )
+                    Icon(
+                        tint = Color.Transparent,
+                        imageVector = Icons.Default.MailOutline,
+                        contentDescription = null,
+                    )
+                }
+            )
+        }
+    )
 
-    }
 }
+
 
 

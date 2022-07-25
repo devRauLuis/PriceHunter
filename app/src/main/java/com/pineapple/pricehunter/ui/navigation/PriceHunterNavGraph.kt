@@ -4,16 +4,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.pineapple.pricehunter.ui.PriceHunterAppState
 import com.pineapple.pricehunter.ui.view.HomeScreen
-import com.pineapple.pricehunter.ui.view.LoginScreen
+import com.pineapple.pricehunter.ui.view.GoogleSignInButton
 
 
 fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
     composable(Routes.Home.name) {
         HomeScreen(navigate = { route -> appState.navigate(route) })
     }
-    composable(Routes.Login.name) {
-        LoginScreen(navigate = { route -> appState.navigate(route) })
-    }
+
 }
 
 //
