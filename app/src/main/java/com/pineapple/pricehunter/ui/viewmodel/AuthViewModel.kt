@@ -1,64 +1,43 @@
 package com.pineapple.pricehunter.ui.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.identity.BeginSignInResult
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.pineapple.pricehunter.common.utils.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ro.alexmamo.firebasesigninwithgoogle.domain.model.Response
-import ro.alexmamo.firebasesigninwithgoogle.domain.model.Response.Success
-import ro.alexmamo.firebasesigninwithgoogle.domain.repository.AuthRepository
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val repo: AuthRepository,
-    val oneTapClient: SignInClient
-): ViewModel() {
-    val isUserAuthenticated get() = repo.isUserAuthenticatedInFirebase()
-    var oneTapSignInResponse by mutableStateOf<Response<BeginSignInResult>>(Success(null))
-        private set
-    var oneTapSignUpResponse by mutableStateOf<Response<BeginSignInResult>>(Success(null))
-        private set
-    var signInResponse by mutableStateOf<Response<Boolean>>(Success(null))
-        private set
-    var createUserResponse by mutableStateOf<Response<Boolean>>(Success(null))
-        private set
+class AuthViewModel @Inject constructor() : ViewModel() {
 
-    fun getAuthState() = liveData(Dispatchers.IO) {
-        repo.getFirebaseAuthState().collect { response ->
-            emit(response)
+    val loadingState = MutableStateFlow(LoadingState.IDLE)
+
+    fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
+        try {
+            loadingState.emit(LoadingState.LOADING)
+            Firebase.auth.signInWithEmailAndPassword(email, password).await()
+            loadingState.emit(LoadingState.LOADED)
+        } catch (e: Exception) {
+            loadingState.emit(LoadingState.error(e.localizedMessage))
         }
     }
 
-    fun oneTapSignIn() = viewModelScope.launch {
-        repo.oneTapSignInWithGoogle().collect { response ->
-            oneTapSignInResponse = response
-        }
-    }
-
-    fun oneTapSignUp() = viewModelScope.launch {
-        repo.oneTapSignUpWithGoogle().collect { response ->
-            oneTapSignUpResponse = response
-        }
-    }
-
-    fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
-        repo.firebaseSignInWithGoogle(googleCredential).collect { response ->
-            signInResponse = response
-        }
-    }
-
-    fun createUser() = viewModelScope.launch {
-        repo.createUserInFirestore().collect { response ->
-            createUserResponse = response
+    fun signWithCredential(credential: AuthCredential) = viewModelScope.launch {
+        try {
+            loadingState.emit(LoadingState.LOADING)
+            Firebase.auth.signInWithCredential(credential).await()
+            Log.d(
+                "USER", Firebase.auth.currentUser?.email.toString()
+            )
+            loadingState.emit(LoadingState.LOADED)
+        } catch (e: Exception) {
+            loadingState.emit(LoadingState.error(e.localizedMessage))
         }
     }
 }
