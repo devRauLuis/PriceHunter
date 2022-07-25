@@ -23,12 +23,15 @@ import com.pineapple.pricehunter.common.snackbar.SnackbarManager
 import com.pineapple.pricehunter.ui.navigation.Routes
 import com.pineapple.pricehunter.ui.navigation.priceHunterGraph
 import com.pineapple.pricehunter.ui.theme.PriceHunterTheme
+import com.pineapple.pricehunter.ui.viewmodel.PriceHunterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.hilt.navigation.compose.hiltViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PriceHunterApp() {
+fun PriceHunterApp(priceHunterViewModel: PriceHunterViewModel = hiltViewModel()) {
     PriceHunterTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -39,6 +42,7 @@ fun PriceHunterApp() {
 //            PriceHunterNavDrawer(drawerState = appState.drawerState)
             val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
             val selectedItem = remember { mutableStateOf(items[0]) }
+
             ModalNavigationDrawer(
                 drawerState = appState.drawerState,
                 drawerContent = {

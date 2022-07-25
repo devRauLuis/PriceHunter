@@ -1,6 +1,9 @@
 package com.pineapple.pricehunter.ui.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
@@ -28,16 +31,18 @@ class AuthViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun signWithCredential(credential: AuthCredential) = viewModelScope.launch {
-        try {
-            loadingState.emit(LoadingState.LOADING)
-            Firebase.auth.signInWithCredential(credential).await()
-            Log.d(
-                "USER", Firebase.auth.currentUser?.email.toString()
-            )
-            loadingState.emit(LoadingState.LOADED)
-        } catch (e: Exception) {
-            loadingState.emit(LoadingState.error(e.localizedMessage))
+    fun signWithCredential(credential: AuthCredential, restartApp: () -> Unit) =
+        viewModelScope.launch {
+            try {
+                loadingState.emit(LoadingState.LOADING)
+                Firebase.auth.signInWithCredential(credential).await()
+                Log.d(
+                    "USER", Firebase.auth.currentUser?.email.toString()
+                )
+                loadingState.emit(LoadingState.LOADED)
+                restartApp()
+            } catch (e: Exception) {
+                loadingState.emit(LoadingState.error(e.localizedMessage))
+            }
         }
-    }
 }

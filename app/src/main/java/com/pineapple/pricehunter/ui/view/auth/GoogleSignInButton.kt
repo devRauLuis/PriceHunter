@@ -24,12 +24,13 @@ import com.pineapple.pricehunter.R
 import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.ui.theme.googleSmall
 import com.pineapple.pricehunter.ui.viewmodel.AuthViewModel
+import okhttp3.internal.wait
 
 @Composable
 fun GoogleSignInButton(
+    restartApp: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    val state by viewModel.loadingState.collectAsState()
 
     // Equivalent of onActivityResult
     val launcher =
@@ -38,16 +39,11 @@ fun GoogleSignInButton(
             try {
                 val account = task.getResult(ApiException::class.java)!!
                 val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
-                viewModel.signWithCredential(credential)
+                viewModel.signWithCredential(credential, restartApp)
             } catch (e: ApiException) {
                 Log.w("TAG", "Google sign in failed", e)
             }
         }
-
-    if (state.status == LoadingState.Status.RUNNING) {
-        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-
-    }
 
 
     val context = LocalContext.current

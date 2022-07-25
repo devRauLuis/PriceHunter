@@ -9,7 +9,9 @@ import com.pineapple.pricehunter.ui.view.GoogleSignInButton
 
 fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
     composable(Routes.Home.name) {
-        HomeScreen(navigate = { route -> appState.navigate(route) })
+        HomeScreen(
+//            navigate = { route -> appState.navigate(route) },
+            restartApp = { appState.clearAndNavigate(Routes.Home.name) })
     }
 
 }

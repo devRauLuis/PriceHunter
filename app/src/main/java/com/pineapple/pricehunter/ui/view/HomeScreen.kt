@@ -1,20 +1,37 @@
 package com.pineapple.pricehunter.ui.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.pineapple.pricehunter.common.utils.LoadingState
+import com.pineapple.pricehunter.ui.viewmodel.AuthViewModel
 
 @Composable
-fun HomeScreen(navigate: (String) -> Unit) {
+fun HomeScreen(
+    restartApp: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
+
+    val currentUser = Firebase.auth.currentUser
+    val state by authViewModel.loadingState.collectAsState()
+
+    if (state.status == LoadingState.Status.RUNNING) {
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,26 +42,40 @@ fun HomeScreen(navigate: (String) -> Unit) {
         Column(
             modifier = Modifier
                 .padding(top = 15.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (Firebase.auth.currentUser == null)
+            if (currentUser == null)
                 Column() {
                     Text(
                         "Siempre el mejor precio",
                         style = MaterialTheme.typography.displaySmall,
                         textAlign = TextAlign.Center
                     )
-                    Box(modifier = Modifier.padding(top = 20.dp)) {
-                        GoogleSignInButton()
+                    Box(modifier = Modifier.padding(top = 40.dp)) {
+                        GoogleSignInButton(restartApp = {
+                            restartApp()
+                        })
                     }
                 }
             else
-                Row() {
-                    Text("Hi, ")
-                    Text(
-                        "${Firebase.auth.currentUser!!.displayName}",
-                        fontWeight = FontWeight.SemiBold
-                    )
+                Column() {
+                    Row() {
+                        Text("Hi, ")
+                        Text(
+                            "${currentUser!!.displayName}",
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            Firebase.auth.signOut()
+                            restartApp()
+                        },
+                        modifier = Modifier.padding(top = 20.dp)
+                    ) {
+                        Text("Sign out")
+                    }
                 }
         }
     }
