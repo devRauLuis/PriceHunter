@@ -1,11 +1,13 @@
 package com.pineapple.pricehunter.ui.view
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.ktx.auth
@@ -16,14 +18,26 @@ fun HomeScreen(navigate: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
+            .fillMaxHeight()
+            .padding(20.dp, 5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-       
-        Box(modifier = Modifier.padding(top = 15.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(top = 15.dp)
+                .fillMaxWidth()
+        ) {
             if (Firebase.auth.currentUser == null)
-                GoogleSignInButton()
+                Column() {
+                    Text(
+                        "Siempre el mejor precio",
+                        style = MaterialTheme.typography.displaySmall,
+                        textAlign = TextAlign.Center
+                    )
+                    Box(modifier = Modifier.padding(top = 20.dp)) {
+                        GoogleSignInButton()
+                    }
+                }
             else
                 Row() {
                     Text("Hi, ")
@@ -31,7 +45,6 @@ fun HomeScreen(navigate: (String) -> Unit) {
                         "${Firebase.auth.currentUser!!.displayName}",
                         fontWeight = FontWeight.SemiBold
                     )
-
                 }
         }
     }
