@@ -18,10 +18,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.pineapple.pricehunter.common.utils.LoadingState
+import com.pineapple.pricehunter.ui.navigation.Routes
 import com.pineapple.pricehunter.ui.viewmodel.AuthViewModel
 
 @Composable
 fun HomeScreen(
+    navigate: (String) -> Unit,
     restartApp: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
@@ -69,7 +71,7 @@ fun HomeScreen(
                 })
                 Button(
                     modifier = Modifier.padding(top = 20.dp),
-                    onClick = {},
+                    onClick = { navigate(Routes.Products.name) },
                 ) {
                     Text("Ver precios")
                 }
