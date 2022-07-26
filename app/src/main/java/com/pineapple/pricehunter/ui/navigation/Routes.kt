@@ -5,18 +5,21 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class Routes(
-    val icon: ImageVector,
+    val icon: ImageVector? = null,
     val displayText: String = "",
+    val hidden: Boolean = true
 ) {
     Home(
         icon = Icons.Filled.Home,
-        displayText = "Inicio"
+        displayText = "Inicio", hidden = false
+
     ),
-    Products(icon = Icons.Filled.CurrencyExchange, displayText = "Productos"),
+    Products(icon = Icons.Filled.CurrencyExchange, displayText = "Productos", hidden = false),
     About(
         icon = Icons.Filled.Info,
-        displayText = "Sobre nosotros"
-    );
+        displayText = "Sobre nosotros", hidden = false
+    ),
+    Product(displayText = "Producto");
 
     companion object {
         fun fromRoute(route: String?): Routes =

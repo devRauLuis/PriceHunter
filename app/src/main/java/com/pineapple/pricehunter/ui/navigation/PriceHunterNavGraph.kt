@@ -12,11 +12,13 @@ import com.pineapple.pricehunter.ui.view.products.FindProductsScreen
 fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
     composable(Routes.Home.name) {
         HomeScreen(
-//            navigate = { route -> appState.navigate(route) },
+            navigate = { route -> appState.navigate(route) },
             restartApp = { appState.clearAndNavigate(Routes.Home.name) })
     }
     composable(Routes.Products.name) {
-        FindProductsScreen()
+        FindProductsScreen(
+            navigate = { route -> appState.navigate(route) },
+        )
     }
     composable(Routes.About.name) {
         AboutScreen()
