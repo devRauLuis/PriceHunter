@@ -38,7 +38,7 @@ fun PriceHunterNavDrawer(
 ) {
     val scope = rememberCoroutineScope()
 // icons to mimic drawer destinations
-    val navItems = Routes.values().toList()
+    val navItems = Routes.values().toList().filter { !it.hidden }
     val selectedItem = remember { mutableStateOf(navItems[0]) }
     var searchField by remember { mutableStateOf("") }
 
@@ -56,27 +56,11 @@ fun PriceHunterNavDrawer(
                     ) { append(Firebase.auth.currentUser?.displayName ?: "") }
                 }, modifier = Modifier.padding(top = 20.dp, start = 20.dp))
             else Text("")
-//                    OutlinedTextField(
-//                        value = searchField,
-//                        onValueChange = { searchField = it },
-//                        label = { Text("Buscar") },
-//                        placeholder = { Text("Nesquik 20oz") },
-//                        leadingIcon = {
-//                            Icon(
-//                                imageVector = Icons.Outlined.Search,
-//                                contentDescription = "Search"
-//                            )
-//
-//                        },
-//                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-//                        keyboardActions = KeyboardActions(onDone = {
-//                            //                    navigate("Products/${searchField}")
-//                        }), modifier = Modifier.fillMaxWidth()
-//                    )
+
             Column(modifier = Modifier.padding(top = 15.dp)) {
                 navItems.forEach { item ->
                     NavigationDrawerItem(
-                        icon = { Icon(item.icon, contentDescription = null) },
+                        icon = { item.icon?.let { Icon(it, contentDescription = null) } },
                         label = { Text(item.name) },
                         selected = item == selectedItem.value,
                         onClick = {
