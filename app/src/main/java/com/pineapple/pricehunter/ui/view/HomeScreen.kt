@@ -8,8 +8,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.auth.ktx.auth
@@ -28,7 +31,6 @@ fun HomeScreen(
 
     if (state.status == LoadingState.Status.RUNNING) {
         LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-
     }
 
 
@@ -58,25 +60,28 @@ fun HomeScreen(
                         })
                     }
                 }
-            else
-                Column() {
-                    Row() {
-                        Text("Hi, ")
-                        Text(
-                            "${currentUser!!.displayName}",
-                            fontWeight = FontWeight.SemiBold
-                        )
+            else {
+                Text(buildAnnotatedString {
+                    append("Hi, ")
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
+                        append("${currentUser!!.displayName}")
                     }
-                    Button(
-                        onClick = {
-                            Firebase.auth.signOut()
-                            restartApp()
-                        },
-                        modifier = Modifier.padding(top = 20.dp)
-                    ) {
-                        Text("Sign out")
-                    }
+                })
+                Button(
+                    modifier = Modifier.padding(top = 20.dp),
+                    onClick = {},
+                ) {
+                    Text("Ver precios")
                 }
+                Button(
+                    onClick = {
+                        Firebase.auth.signOut()
+                    },
+                    modifier = Modifier.padding(top = 20.dp)
+                ) {
+                    Text("Sign out")
+                }
+            }
         }
     }
 }

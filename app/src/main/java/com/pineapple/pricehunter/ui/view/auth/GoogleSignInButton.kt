@@ -1,5 +1,6 @@
 package com.pineapple.pricehunter.ui.view
 
+import android.graphics.Paint
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -57,36 +61,44 @@ fun GoogleSignInButton(
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
         launcher.launch(googleSignInClient.signInIntent)
     }
-    ElevatedButton(
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        ElevatedButton(
 //        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
-        onClick = onGoogleSignInClick,
-        content = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                content = {
-                    Icon(
-                        tint = Color.Unspecified,
-                        painter = painterResource(id = R.drawable.google_ic),
-                        contentDescription = null,
-                    )
-                    Row(
-                        modifier = Modifier.padding(start = 16.dp),
-                    ) {
-                        Text("Sign in with ")
-                        Text(
-                            style = googleSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            text = "Google"
+            modifier = Modifier
+                .height(50.dp),
+            onClick = onGoogleSignInClick,
+            content = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    content = {
+                        Icon(
+                            tint = Color.Unspecified,
+                            painter = painterResource(id = R.drawable.google_ic),
+                            contentDescription = null,
                         )
+                        Row(
+                            modifier = Modifier.padding(start = 16.dp),
+                        ) {
+                            Text(buildAnnotatedString {
+                                append("Sign in with ")
+                                withStyle(
+                                    style = SpanStyle().copy(
+                                        fontFamily = googleSmall.fontFamily,
+                                        fontWeight = googleSmall.fontWeight,
+                                        fontSize = googleSmall.fontSize
+                                    )
+                                ) {
+                                    append("Google")
+                                }
+                            })
+
+                        }
                     }
-                }
-            )
-        }
-    )
+                )
+            }
+        )
+    }
+
 
 }
 

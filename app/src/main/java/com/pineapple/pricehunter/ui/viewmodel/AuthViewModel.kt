@@ -18,8 +18,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor() : ViewModel() {
-
+    var isUserAuthenticated by mutableStateOf<Boolean>(false)
+        private set
     val loadingState = MutableStateFlow(LoadingState.IDLE)
+
+    init {
+        viewModelScope.launch {
+            Firebase.auth.addAuthStateListener {
+                isUserAuthenticated = it.currentUser != null
+            }
+        }
+    }
 
     fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
         try {

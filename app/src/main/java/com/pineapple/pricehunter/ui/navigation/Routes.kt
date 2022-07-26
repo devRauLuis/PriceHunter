@@ -1,8 +1,7 @@
 package com.pineapple.pricehunter.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class Routes(
@@ -13,16 +12,16 @@ enum class Routes(
         icon = Icons.Filled.Home,
         displayText = "Inicio"
     ),
-    Login(
-        icon = Icons.Filled.Person,
-        displayText = "Registro Criptomoneda",
+    Products(icon = Icons.Filled.CurrencyExchange, displayText = "Productos"),
+    About(
+        icon = Icons.Filled.Info,
+        displayText = "Sobre nosotros"
     );
 
     companion object {
         fun fromRoute(route: String?): Routes =
             when (route?.substringBefore("/")) {
                 Home.name -> Home
-                Login.name -> Login
                 null -> Home
                 else -> throw IllegalArgumentException("Route $route is not recognized.")
             }

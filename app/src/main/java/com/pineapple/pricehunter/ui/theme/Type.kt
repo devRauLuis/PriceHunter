@@ -23,7 +23,6 @@ val productSansFamily = FontFamily(
 // Set of Material typography styles to start with
 val googleSmall = TextStyle(fontFamily = productSansFamily, fontWeight = FontWeight.Bold, fontSize = 16.sp)
 
-
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
