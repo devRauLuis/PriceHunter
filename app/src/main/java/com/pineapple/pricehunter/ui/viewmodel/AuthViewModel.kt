@@ -10,6 +10,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.pineapple.pricehunter.common.utils.LoadingState
+import com.pineapple.pricehunter.model.Price
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -17,10 +18,9 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : ViewModel() {
+class AuthViewModel @Inject constructor() : PriceHunterViewModel() {
     var isUserAuthenticated by mutableStateOf<Boolean>(false)
         private set
-    val loadingState = MutableStateFlow(LoadingState.IDLE)
 
     init {
         viewModelScope.launch {
