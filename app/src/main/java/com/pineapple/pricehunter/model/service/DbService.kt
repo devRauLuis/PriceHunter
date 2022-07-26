@@ -19,5 +19,5 @@ package com.pineapple.pricehunter.model.service
 import com.pineapple.pricehunter.model.Product
 
 interface DbService {
-    suspend fun getAllProducts(): List<Product>
+    suspend fun getAllProducts(query: String? = ""): List<Product>
 }

@@ -17,9 +17,9 @@ limitations under the License.
 package com.pineapple.pricehunter.model.service.impl
 
 import android.util.Log
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.pineapple.pricehunter.model.Product
 import com.pineapple.pricehunter.model.service.DbService
@@ -27,10 +27,18 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class DbServiceImpl @Inject constructor() : DbService {
-    override suspend fun getAllProducts(): List<Product> {
-        val result = Firebase.firestore.collection(PRODUCTS_COLLECTION).get().await()
-        Log.d(TAG, result.map { it.toObject<Product>().copy(id = it.id) }.toString())
-        return result.map { it.toObject<Product>().copy(id = it.id) }
+    override suspend fun getAllProducts(query: String?): List<Product> {
+        val q = Firebase.firestore.collection(PRODUCTS_COLLECTION).limit(100).orderBy(
+            "name", Query.Direction.ASCENDING
+        )
+        // If the user is searching for an specific string add case to query
+        if (!query.isNullOrEmpty()) q.whereEqualTo("name", query)
+        val result = q.get().await()
+
+        // Map result from Firestore JSON to model
+        val mappedResult = result.map { it.toObject<Product>().copy(id = it.id) }
+        Log.d(TAG, mappedResult.toString())
+        return mappedResult
     }
 
     companion object {
