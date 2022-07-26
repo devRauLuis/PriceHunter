@@ -40,48 +40,44 @@ fun PriceHunterApp(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
 
-    PriceHunterTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-            val appState = rememberAppState()
-            val scope = rememberCoroutineScope()
-//            PriceHunterNavDrawer(drawerState = appState.drawerState)
-            val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
-            val selectedItem = remember { mutableStateOf(items[0]) }
-            val currentUser = Firebase.auth.currentUser
 
-            PriceHunterNavDrawer(
-                drawerState = appState.drawerState,
-                navigate = { appState.navigate(it) }
-            ) {
-                Scaffold(
-                    snackbarHost = {
-                        SnackbarHost(
-                            appState.snackbarHostState
+    val appState = rememberAppState()
+    val scope = rememberCoroutineScope()
+//            PriceHunterNavDrawer(drawerState = appState.drawerState)
+    val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email)
+    val selectedItem = remember { mutableStateOf(items[0]) }
+    val currentUser = Firebase.auth.currentUser
+
+    PriceHunterNavDrawer(
+        drawerState = appState.drawerState,
+        navigate = { appState.navigate(it) }
+    ) {
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    appState.snackbarHostState
+                )
+            },
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Price Hunter", fontSize = 24.sp, fontWeight = FontWeight.Bold
                         )
                     },
-                    topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    "Price Hunter", fontSize = 24.sp, fontWeight = FontWeight.Bold
-                                )
-                            },
 
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    scope.launch {
-                                        appState.drawerState.open()
-                                    }
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Menu,
-                                        contentDescription = "Localized description"
-                                    )
-                                }
-                            },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                appState.drawerState.open()
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "Localized description"
+                            )
+                        }
+                    },
 //                        actions = {
 //                            IconButton(onClick = { /* doSomething() */ }) {
 //                                Icon(
@@ -90,27 +86,26 @@ fun PriceHunterApp(
 //                                )
 //                            }
 //                        }
-                        )
-                    },
+                )
+            },
 
-                    ) { innerPadding ->
-
-
-                    NavHost(
-                        navController = appState.navController,
-                        startDestination = Routes.Home.name,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
+            ) { innerPadding ->
 
 
-                        priceHunterGraph(appState)
-                    }
-                }
+            NavHost(
+                navController = appState.navController,
+                startDestination = Routes.Home.name,
+                modifier = Modifier.padding(innerPadding)
+            ) {
 
+
+                priceHunterGraph(appState)
             }
         }
+
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
