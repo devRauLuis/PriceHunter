@@ -20,4 +20,5 @@ import com.pineapple.pricehunter.model.Product
 
 interface DbService {
     suspend fun getAllProducts(query: String? = ""): List<Product>
+    suspend fun getProduct(id: String): Product?
 }

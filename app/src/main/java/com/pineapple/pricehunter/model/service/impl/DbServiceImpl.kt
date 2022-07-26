@@ -37,7 +37,15 @@ class DbServiceImpl @Inject constructor() : DbService {
 
         // Map result from Firestore JSON to model
         val mappedResult = result.map { it.toObject<Product>().copy(id = it.id) }
-        Log.d(TAG, mappedResult.toString())
+        Log.d(TAG, "getAllProducts: $mappedResult")
+        return mappedResult
+    }
+
+    override suspend fun getProduct(id: String): Product? {
+        val q = Firebase.firestore.collection(PRODUCTS_COLLECTION).document(id)
+        val result = q.get().await()
+        val mappedResult = result.toObject<Product>()?.copy(id = id)
+        Log.d(TAG, "getProduct: ${mappedResult.toString()}")
         return mappedResult
     }
 
