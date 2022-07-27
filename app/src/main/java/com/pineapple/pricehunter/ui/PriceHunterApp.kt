@@ -1,6 +1,7 @@
 package com.pineapple.pricehunter.ui
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,6 +49,7 @@ fun PriceHunterApp(
     val authLoadingState by authViewModel.loadingState.collectAsState()
     val productsLoadingState by productsViewModel.loadingState.collectAsState()
     val loadingStateList = listOf(authLoadingState, productsLoadingState)
+
     PriceHunterTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -88,14 +90,6 @@ fun PriceHunterApp(
                                         )
                                     }
                                 },
-//                        actions = {
-//                            IconButton(onClick = { /* doSomething() */ }) {
-//                                Icon(
-//                                    imageVector = Icons.Filled.Favorite,
-//                                    contentDescription = "Localized description"
-//                                )
-//                            }
-//                        }
                             )
                         }
                     },
