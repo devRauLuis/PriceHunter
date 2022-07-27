@@ -29,12 +29,6 @@ fun HomeScreen(
 ) {
 
     val currentUser = Firebase.auth.currentUser
-    val state by authViewModel.loadingState.collectAsState()
-
-    if (state.status == LoadingState.Status.RUNNING) {
-        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-    }
-
 
     Column(
         modifier = Modifier

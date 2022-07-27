@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.pineapple.pricehunter.common.snackbar.SnackbarManager
+import com.pineapple.pricehunter.common.snackbar.SnackbarMessage
 import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.model.Price
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,12 +33,14 @@ class AuthViewModel @Inject constructor() : PriceHunterViewModel() {
     }
 
     fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
-        try {
-            loadingState.emit(LoadingState.LOADING)
-            Firebase.auth.signInWithEmailAndPassword(email, password).await()
-            loadingState.emit(LoadingState.LOADED)
-        } catch (e: Exception) {
-            loadingState.emit(LoadingState.error(e.localizedMessage))
+        viewModelScope.launch {
+            try {
+                loadingState.emit(LoadingState.LOADING)
+                Firebase.auth.signInWithEmailAndPassword(email, password).await()
+                loadingState.emit(LoadingState.LOADED)
+            } catch (e: Exception) {
+                loadingState.emit(LoadingState.error(e.localizedMessage))
+            }
         }
     }
 

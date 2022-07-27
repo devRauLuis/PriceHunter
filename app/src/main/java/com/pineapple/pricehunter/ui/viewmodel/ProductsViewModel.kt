@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.model.Price
 import com.pineapple.pricehunter.model.Product
 import com.pineapple.pricehunter.model.service.DbService
@@ -32,6 +33,7 @@ fun ProductsUiState.toProduct() = Product(
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHunterViewModel() {
+
     var uiState by mutableStateOf(ProductsUiState())
         private set
 
@@ -46,10 +48,12 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
     fun findAllProducts(nameQuery: String? = "") {
         viewModelScope.launch {
             try {
-                val products = dbService.getAllProducts()
+                loadingState.emit(LoadingState.LOADING)
+                val products = dbService.getAllProducts(nameQuery)
                 uiState = uiState.copy(products = products)
-            } catch (error: IOException) {
-                onError(error)
+                loadingState.emit(LoadingState.LOADED)
+            } catch (e: IOException) {
+                loadingState.emit(LoadingState.error(e.localizedMessage))
             }
             Log.d("PRODUCTS VIEW MODEL", uiState.products.toString())
         }
@@ -58,15 +62,16 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
     fun findProduct(id: String) {
         viewModelScope.launch {
             try {
+                loadingState.emit(LoadingState.LOADING)
                 val product = dbService.getProduct(id)
                 if (product != null)
                     uiState = product.toProductsUiState(uiState)
-            } catch (error: IOException) {
-                onError(error)
+                loadingState.emit(LoadingState.LOADED)
+            } catch (e: IOException) {
+                loadingState.emit(LoadingState.error(e.localizedMessage))
             }
             Log.d("PRODUCTS VIEW MODEL", uiState.toProduct().toString())
         }
     }
-
 
 }
