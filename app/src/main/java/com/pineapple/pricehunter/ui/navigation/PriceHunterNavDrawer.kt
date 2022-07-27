@@ -40,7 +40,6 @@ fun PriceHunterNavDrawer(
 // icons to mimic drawer destinations
     val navItems = Routes.values().toList().filter { !it.hidden }
     val selectedItem = remember { mutableStateOf(navItems[0]) }
-    var searchField by remember { mutableStateOf("") }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
