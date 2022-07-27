@@ -28,17 +28,19 @@ import javax.inject.Inject
 
 class DbServiceImpl @Inject constructor() : DbService {
     override suspend fun getAllProducts(query: String?): List<Product> {
-        val q = Firebase.firestore.collection(PRODUCTS_COLLECTION).limit(100).orderBy(
+        val q = Firebase.firestore.collection(PRODUCTS_COLLECTION).orderBy(
             "name", Query.Direction.ASCENDING
         )
-        // If the user is searching for an specific string add case to query
-        if (!query.isNullOrEmpty()) q.whereEqualTo("name", query)
+
         val result = q.get().await()
+        var mappedResult = result?.map { it.toObject<Product>().copy(id = it.id) }
+        if (!query.isNullOrBlank())
+            mappedResult = mappedResult?.filter { it.name.contains(query) }
+
 
         // Map result from Firestore JSON to model
-        val mappedResult = result.map { it.toObject<Product>().copy(id = it.id) }
-        Log.d(TAG, "getAllProducts: $mappedResult")
-        return mappedResult
+        Log.d(TAG, "getAllProducts(${query}): $mappedResult")
+        return mappedResult ?: listOf()
     }
 
     override suspend fun getProduct(id: String): Product? {
