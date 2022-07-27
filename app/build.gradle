@@ -91,5 +91,6 @@ dependencies {
     //Coil
     implementation "io.coil-kt:coil-compose:$coil_compose_version"
 
+    implementation("com.himanshoe:pluck:1.0.0-RC2")
 
 }

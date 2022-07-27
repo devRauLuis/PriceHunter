@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pineapple.pricehunter">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".PriceHunterHiltApp"
         android:allowBackup="true"
@@ -17,11 +20,9 @@
         <activity
             android:name=".ui.PriceHunterActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.PriceHunter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
