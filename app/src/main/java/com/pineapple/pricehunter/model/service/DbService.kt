@@ -17,8 +17,17 @@ limitations under the License.
 package com.pineapple.pricehunter.model.service
 
 import com.pineapple.pricehunter.model.Product
+import com.pineapple.pricehunter.model.Shop
 
 interface DbService {
     suspend fun getAllProducts(query: String? = ""): List<Product>
     suspend fun getProduct(id: String): Product?
+    suspend fun updateProduct(product: Product): Product?
+    suspend fun createProduct(product: Product): Product?
+
+    suspend fun getAllShops(query: String? = ""): List<Shop>
+    suspend fun getShop(id: String): Shop?
+    suspend fun saveShop(shop: Shop): Shop?
+
+
 }
