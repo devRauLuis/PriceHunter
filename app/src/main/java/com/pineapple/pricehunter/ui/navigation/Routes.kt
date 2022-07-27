@@ -19,7 +19,9 @@ enum class Routes(
         icon = Icons.Filled.Info,
         displayText = "Sobre nosotros", hidden = false
     ),
-    Product(displayText = "Producto");
+    Product(displayText = "Producto"),
+    AddPrice(displayText = "Agregar precio")
+    ;
 
     companion object {
         fun fromRoute(route: String?): Routes =
