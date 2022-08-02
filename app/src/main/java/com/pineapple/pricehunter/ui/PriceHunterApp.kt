@@ -5,13 +5,8 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -22,11 +17,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.pineapple.pricehunter.common.snackbar.SnackbarManager
 import com.pineapple.pricehunter.common.utils.LoadingState
+import com.pineapple.pricehunter.ui.navigation.PriceHunterActionMenu
 import com.pineapple.pricehunter.ui.navigation.PriceHunterNavDrawer
 import com.pineapple.pricehunter.ui.navigation.Routes
 import com.pineapple.pricehunter.ui.navigation.priceHunterGraph
@@ -49,6 +44,11 @@ fun PriceHunterApp(
     val authLoadingState by authViewModel.loadingState.collectAsState()
     val productsLoadingState by productsViewModel.loadingState.collectAsState()
     val loadingStateList = listOf(authLoadingState, productsLoadingState)
+    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val route = navBackStackEntry?.destination?.route ?: Routes.Home.name
+
+    Log.d("PriceHunterApp", "currentDestination: $route")
 
     PriceHunterTheme {
         // A surface container using the 'background' color from the theme
@@ -90,22 +90,25 @@ fun PriceHunterApp(
                                         )
                                     }
                                 },
+                                actions = {
+                                    PriceHunterActionMenu(
+                                        route = route,
+                                        navigate = appState::navigate
+                                    )
+                                }
                             )
                         }
                     },
                 ) { innerPadding ->
-                    Column(
-                        modifier = Modifier.padding(innerPadding)
+                    NavHost(
+                        navController = appState.navController,
+                        startDestination = Routes.Home.name,
+                        modifier = Modifier.padding(innerPadding),
                     ) {
-
-                        NavHost(
-                            navController = appState.navController,
-                            startDestination = Routes.Home.name,
-                        ) {
-                            priceHunterGraph(appState)
-                        }
+                        priceHunterGraph(appState)
                     }
                 }
+
             }
         }
 
