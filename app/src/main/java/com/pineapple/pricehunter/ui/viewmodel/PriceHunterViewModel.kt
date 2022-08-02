@@ -21,6 +21,7 @@ open class PriceHunterViewModel() : ViewModel() {
     }
 
     open fun onError(error: Throwable) {
-        SnackbarManager.showMessage(error.toSnackbarMessage())
+        SnackbarManager.showMessage(error.localizedMessage)
     }
+
 }
