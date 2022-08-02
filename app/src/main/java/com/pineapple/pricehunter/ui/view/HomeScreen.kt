@@ -1,10 +1,7 @@
 package com.pineapple.pricehunter.ui.view
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,11 +66,11 @@ fun HomeScreen(
                 ) {
                     Text("Ver precios")
                 }
-                Button(
+                OutlinedButton(
                     onClick = {
                         Firebase.auth.signOut()
                     },
-                    modifier = Modifier.padding(top = 20.dp)
+                    modifier = Modifier.padding(top = 500.dp)
                 ) {
                     Text("Sign out")
                 }
