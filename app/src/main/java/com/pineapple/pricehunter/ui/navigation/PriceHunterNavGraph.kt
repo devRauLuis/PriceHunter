@@ -9,6 +9,7 @@ import com.pineapple.pricehunter.ui.PriceHunterAppState
 import com.pineapple.pricehunter.ui.view.AboutScreen
 import com.pineapple.pricehunter.ui.view.HomeScreen
 import com.pineapple.pricehunter.ui.view.products.AddPriceScreen
+import com.pineapple.pricehunter.ui.view.products.AddProductScreen
 import com.pineapple.pricehunter.ui.view.products.FindProductsScreen
 import com.pineapple.pricehunter.ui.view.products.ProductScreen
 
@@ -44,8 +45,7 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
                 uriPattern = "app://$addPriceScreen/{id}"
             }
         ),
-
-        ) {
+    ) {
         val id = it.arguments?.getString("id")
         println("id arg: $id")
         AddPriceScreen(id = id, popUp = { appState.popUp() })
@@ -69,6 +69,32 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
         val id = it.arguments?.getString("id")
         println("id arg: $id")
         ProductScreen(id = id, navigate = { route -> appState.navigate(route) })
+    }
+
+    val addProductScreen = Routes.AddProduct.name
+    composable(
+        route = "$addProductScreen/{id}",
+        arguments = listOf(
+            navArgument("id") {
+                type = NavType.StringType
+            }
+        ),
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "app://$addProductScreen/{id}"
+            }
+        ),
+
+        ) {
+        val id = it.arguments?.getString("id")
+        println("id arg: $id")
+        AddProductScreen(id = id, popUp = appState::popUp)
+    }
+
+    composable(Routes.AddProduct.name) {
+        AddProductScreen(
+            popUp = appState::popUp
+        )
     }
 
     composable(Routes.About.name) {
