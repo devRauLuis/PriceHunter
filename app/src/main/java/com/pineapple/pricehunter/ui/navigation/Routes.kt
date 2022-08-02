@@ -20,8 +20,8 @@ enum class Routes(
         displayText = "Sobre nosotros", hidden = false
     ),
     Product(displayText = "Producto"),
-    AddPrice(displayText = "Agregar precio")
-    ;
+    AddPrice(displayText = "Agregar precio"),
+    AddProduct(displayText = "Agregar producto");
 
     companion object {
         fun fromRoute(route: String?): Routes =
