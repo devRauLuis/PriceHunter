@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection.Companion.Content
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,10 @@ fun FindProductsScreen(
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 15.dp)
     ) {
-        Text("Busca un producto", style = MaterialTheme.typography.displaySmall)
+        Text(
+            "Busca un producto",
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
+        )
         OutlinedTextField(
             value = uiState.searchField,
             onValueChange = viewModel::setSearchField,
@@ -135,11 +139,15 @@ fun FindProductsScreen(
                                             contentDescription = "Location icon",
                                             modifier = Modifier.size(15.dp)
                                         )
+
                                         Text(
                                             text = minPrice!!.shopName,
                                             style = MaterialTheme.typography.titleSmall.copy(
                                                 lineHeight = 16.sp,
-                                            ), modifier = Modifier.padding(start = 3.dp)
+                                            ),
+                                            modifier = Modifier.padding(start = 3.dp),
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
                                         )
                                     }
                                 }
