@@ -1,10 +1,9 @@
 package com.pineapple.pricehunter.ui.view.products
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Edit
@@ -12,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,8 +33,19 @@ fun AddPriceScreen(
         }
     }
 
-    Column(modifier = Modifier.padding(15.dp, 20.dp)) {
-        Text("Agregar precio", style = MaterialTheme.typography.displaySmall)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(
+                rememberScrollState()
+            )
+            .padding(15.dp, 20.dp)
+
+    ) {
+        Text(
+            "Agregar precio",
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
