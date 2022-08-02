@@ -4,10 +4,15 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.pineapple.pricehunter.common.snackbar.SnackbarManager
+import com.pineapple.pricehunter.common.snackbar.SnackbarMessage
 import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.model.Price
 import com.pineapple.pricehunter.model.Product
@@ -48,12 +53,19 @@ fun ProductsUiState.toPrice() = Price(
 )
 
 @HiltViewModel
-class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHunterViewModel() {
+class ProductsViewModel @Inject constructor(
+    val savedStateHandle: SavedStateHandle,
+    val dbService: DbService
+) : PriceHunterViewModel() {
 
     var uiState by mutableStateOf(ProductsUiState())
         private set
 
+    var id by mutableStateOf("")
+
     init {
+        Log.d("SAVED STATE HANDLE", savedStateHandle.get<String>("id") ?: "")
+        id = savedStateHandle.get<String>("id") ?: ""
         findAllProducts()
         findAllShops()
     }
@@ -66,20 +78,20 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
         uiState = uiState.copy(shopDropdownExpanded = !uiState.shopDropdownExpanded)
     }
 
-    fun setShopId(newValue: String) {
-        uiState = uiState.copy(shopId = newValue)
-    }
-
-    fun setShopName(newValue: String) {
-        uiState = uiState.copy(shopName = newValue)
-    }
-
     fun setPrice(newValue: String) {
         uiState = uiState.copy(price = newValue.toFloatOrNull() ?: 0F)
     }
 
     fun setSearchField(newValue: String) {
         uiState = uiState.copy(searchField = newValue)
+    }
+
+    fun setName(newValue: String) {
+        uiState = uiState.copy(name = newValue)
+    }
+
+    fun setPhotoUrl(newValue: String) {
+        uiState = uiState.copy(photoUrl = newValue)
     }
 
     fun findAllProducts(nameQuery: String? = "") {
@@ -101,8 +113,9 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
             try {
                 loadingState.emit(LoadingState.LOADING)
                 val product = dbService.getProduct(id)
-                if (product != null)
+                if (product != null) {
                     uiState = product.toProductsUiState(uiState)
+                }
                 loadingState.emit(LoadingState.LOADED)
             } catch (e: IOException) {
                 loadingState.emit(LoadingState.error(e.localizedMessage))
@@ -125,6 +138,36 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
         }
     }
 
+    fun saveProduct(popUp: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                loadingState.emit(LoadingState.LOADING)
+                var product = uiState.toProduct()
+
+                if (product.name.isBlank() || product.name.length < 3) {
+                    SnackbarManager.showMessage("El nombre es requerido con mas de 3 letras")
+                    return@launch
+                } else if (!product.photoUrl.matches(Regex("^(http|https)://.*\$"))) {
+                    SnackbarManager.showMessage("El URL no es valido")
+                    return@launch
+                }
+                if (uiState.id.isNullOrBlank()) {
+                    product = dbService.createProduct(product)!!
+                } else {
+                    product = dbService.updateProduct(product)!!
+                }
+                uiState = uiState.copy(products = uiState.products + product)
+                findAllProducts()
+                loadingState.emit(LoadingState.LOADED)
+                popUp()
+            } catch (e: IOException) {
+                loadingState.emit(LoadingState.error(e.localizedMessage))
+            }
+
+        }
+
+    }
+
     fun savePrice(popUp: () -> Unit) {
         viewModelScope.launch {
             try {
@@ -132,6 +175,14 @@ class ProductsViewModel @Inject constructor(val dbService: DbService) : PriceHun
                 var product = uiState.toProduct()
                 val price = uiState.toPrice()
                     .copy(createdAt = Timestamp.now(), createdBy = Firebase.auth.currentUser?.uid)
+
+                if (price.price <= 0F) {
+                    SnackbarManager.showMessage("Precio debe ser mayor a 0")
+                    return@launch
+                } else if (uiState.selectedShop == null) {
+                    SnackbarManager.showMessage("Por favor seleccione una tienda")
+                    return@launch
+                }
 
                 // If already exists a price for this shop, update it
                 if (product.prices.any { it.shopId == price.shopId }) {
