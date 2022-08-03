@@ -20,11 +20,6 @@ fun PriceHunterActionMenu(
     navigate: (String) -> Unit,
     productsViewModel: ProductsViewModel = hiltViewModel()
 ) {
-    val id = productsViewModel.id
-
-    LaunchedEffect(id) {
-        Log.d("PriceHunterActionMenu", "id: $id")
-    }
 
     when {
         route.contains(Routes.Products.name) -> {
@@ -48,7 +43,7 @@ fun PriceHunterActionMenu(
                 DropdownMenuItem(
                     text = { Text("Agregar tienda") },
                     onClick = {
-                        navigate("${Routes.AddShop.name}/${id}")
+                        navigate(Routes.AddShop.name)
                     },
                     leadingIcon = {
                         Icon(
