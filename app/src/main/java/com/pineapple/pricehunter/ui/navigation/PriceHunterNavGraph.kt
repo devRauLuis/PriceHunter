@@ -110,6 +110,12 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
         )
     }
 
+    composable(Routes.AddShop.name) {
+        AddShopScreen(
+            popUp = appState::popUp
+        )
+    }
+
     val addShopScreen = Routes.AddShop.name
     composable(
         route = "$addShopScreen/{id}",
