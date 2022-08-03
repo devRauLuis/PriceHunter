@@ -12,6 +12,9 @@ import com.pineapple.pricehunter.ui.view.products.AddPriceScreen
 import com.pineapple.pricehunter.ui.view.products.AddProductScreen
 import com.pineapple.pricehunter.ui.view.products.FindProductsScreen
 import com.pineapple.pricehunter.ui.view.products.ProductScreen
+import com.pineapple.pricehunter.ui.view.shops.AddShopScreen
+import com.pineapple.pricehunter.ui.view.shops.FindShopsScreen
+import com.pineapple.pricehunter.ui.view.shops.ShopScreen
 
 fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
 
@@ -29,7 +32,8 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
 
     composable(Routes.AddPrice.name) {
         AddPriceScreen(
-            popUp = { appState.popUp() })
+            popUp = { appState.popUp() }
+        )
     }
 
     val addPriceScreen = Routes.AddPrice.name
@@ -84,8 +88,7 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
                 uriPattern = "app://$addProductScreen/{id}"
             }
         ),
-
-        ) {
+    ) {
         val id = it.arguments?.getString("id")
         println("id arg: $id")
         AddProductScreen(id = id, popUp = appState::popUp)
@@ -100,5 +103,50 @@ fun NavGraphBuilder.priceHunterGraph(appState: PriceHunterAppState) {
     composable(Routes.About.name) {
         AboutScreen()
     }
+
+    composable(Routes.Shops.name) {
+        FindShopsScreen(
+            navigate = { route -> appState.navigate(route) },
+        )
+    }
+
+    val addShopScreen = Routes.AddShop.name
+    composable(
+        route = "$addShopScreen/{id}",
+        arguments = listOf(
+            navArgument("id") {
+                type = NavType.StringType
+            }
+        ),
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "app://$addShopScreen/{id}"
+            }
+        ),
+    ) {
+        val id = it.arguments?.getString("id")
+        println("id arg: $id")
+        AddShopScreen(id = id, popUp = appState::popUp)
+    }
+
+    val shopScreen = Routes.Shop.name
+    composable(
+        route = "$shopScreen/{id}",
+        arguments = listOf(
+            navArgument("id") {
+                type = NavType.StringType
+            }
+        ),
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "app://$shopScreen/{id}"
+            }
+        ),
+        ) {
+        val id = it.arguments?.getString("id")
+        println("id arg: $id")
+        ShopScreen(id = id, navigate = { route -> appState.navigate(route) })
+    }
+
 
 }
