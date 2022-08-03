@@ -40,15 +40,9 @@ import com.pineapple.pricehunter.ui.viewmodel.ProductsViewModel
 @Composable
 fun FindProductsScreen(
     navigate: (String) -> Unit,
-    viewModel: ProductsViewModel = hiltViewModel(), authViewModel: AuthViewModel = hiltViewModel()
+    viewModel: ProductsViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState
-    val authLoadingState by authViewModel.loadingState.collectAsState()
-    val productsLoadingState by viewModel.loadingState.collectAsState()
-
-    val loadingStateList = listOf(authLoadingState, productsLoadingState)
-
-    Log.d("PRICE HUNTER APP ", loadingStateList.toString())
 
     Column(
         modifier = Modifier
