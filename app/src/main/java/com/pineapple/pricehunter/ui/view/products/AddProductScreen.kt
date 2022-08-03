@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -23,13 +24,19 @@ import kotlin.reflect.KFunction0
 fun AddProductScreen(
     viewModel: ProductsViewModel = hiltViewModel(),
     id: String? = "",
-    popUp: KFunction0<Unit>
+    popUp: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
+    LaunchedEffect(id) {
+        println("id arg: $id")
+        if (!id.isNullOrEmpty()) {
+            viewModel.findProduct(id)
+        }
+    }
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,18 +46,21 @@ fun AddProductScreen(
             "Agregar producto",
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold)
         )
+
         TextField(
             value = uiState.name.toString().uppercase(),
             onValueChange = viewModel::setName,
             label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth()
         )
+
         TextField(
             value = uiState.photoUrl.toString(),
             onValueChange = viewModel::setPhotoUrl,
             label = { Text("URL de imagen") },
             modifier = Modifier.fillMaxWidth()
         )
+
         AsyncImage(
             model = uiState.photoUrl,
             contentDescription = uiState.name,
@@ -79,5 +89,6 @@ fun AddProductScreen(
                 Text(text = "Guardar")
             }
         }
+
     }
 }
