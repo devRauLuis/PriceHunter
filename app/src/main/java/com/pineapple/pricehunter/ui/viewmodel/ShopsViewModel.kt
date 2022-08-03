@@ -11,7 +11,6 @@ import com.pineapple.pricehunter.common.utils.LoadingState
 import com.pineapple.pricehunter.model.Product
 import com.pineapple.pricehunter.model.Shop
 import com.pineapple.pricehunter.model.service.DbService
-import com.pineapple.pricehunter.model.toProductsUiState
 import com.pineapple.pricehunter.model.toShopUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -129,6 +128,7 @@ class ShopsViewModel @Inject constructor(
                 uiState = uiState.copy(shops = uiState.shops + shop)
                 loadingState.emit(LoadingState.LOADED)
                 popUp()
+                findAllShops()
             } catch (e: IOException) {
                 loadingState.emit(LoadingState.error(e.localizedMessage))
             }
