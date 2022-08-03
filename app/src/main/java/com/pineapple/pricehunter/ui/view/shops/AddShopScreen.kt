@@ -2,28 +2,21 @@ package com.pineapple.pricehunter.ui.view.shops
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import com.himanshoe.pluck.ui.Pluck
-import com.pineapple.pricehunter.ui.navigation.Routes
 import com.pineapple.pricehunter.ui.viewmodel.ShopsViewModel
-import kotlin.reflect.KFunction0
 
 @Composable
 fun AddShopScreen(
     viewModel: ShopsViewModel = hiltViewModel(),
     id: String? = "",
-    popUp: KFunction0<Unit>
+    popUp: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
