@@ -1,30 +1,23 @@
 package com.pineapple.pricehunter.ui.view.products
 
-import android.app.Dialog
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.pineapple.pricehunter.common.utils.formatToCurrency
-import com.pineapple.pricehunter.model.Product
 import com.pineapple.pricehunter.ui.navigation.Routes
 import com.pineapple.pricehunter.ui.viewmodel.ProductsViewModel
 
@@ -49,19 +42,67 @@ fun ProductScreen(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 15.dp)
     ) {
-
-        AsyncImage(
-            model = uiState.photoUrl,
-            contentDescription = uiState.name,
+        Box(
             modifier = Modifier
+                .height(300.dp)
+        ) {
+            AsyncImage(
+                model = uiState.photoUrl,
+                contentDescription = uiState.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp),
+            )
+//            Column(
+//                verticalArrangement = Arrangement.Bottom,
+//                horizontalAlignment = Alignment.End,
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(end = 20.dp)
+//            ) {
+//
+//            }
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .padding(top = 20.dp)
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
-        )
-        Text(
-            uiState.name.toString().uppercase(),
-            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(top = 15.dp)
-        )
+        ) {
+            Text(
+                uiState.name.toString().uppercase(),
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp, lineHeight = 24.sp
+                ), modifier = Modifier.fillMaxWidth(.65f)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 25.dp)
+            ) {
+                FilledTonalIconButton(
+                    onClick = { navigate("${Routes.AddProduct.name}/${uiState.id}") },
+                    modifier = Modifier.size(40.dp),
+                ) {
+                    Icon(
+                        Icons.Filled.Edit, contentDescription = "Editar",
+                    )
+                }
+
+                FilledTonalIconButton(
+                    onClick = { navigate("${Routes.AddPrice.name}/${uiState.id}") },
+                    modifier = Modifier
+                        .padding(start = 15.dp)
+                        .size(40.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.AttachMoney,
+                        contentDescription = "Agregar precio",
+                    )
+                }
+            }
+        }
         LazyColumn(
             modifier = Modifier.padding(top = 15.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -105,22 +146,6 @@ fun ProductScreen(
 
 
                 }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ElevatedButton(
-                onClick = { navigate("${Routes.AddPrice.name}/${uiState.id}") },
-                colors = ButtonDefaults.elevatedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.secondary
-                )
-            ) {
-                Text(text = "Agregar precio")
             }
         }
     }
