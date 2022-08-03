@@ -108,7 +108,6 @@ fun PriceHunterApp(
                         priceHunterGraph(appState)
                     }
                 }
-
             }
         }
 
