@@ -15,13 +15,16 @@ enum class Routes(
 
     ),
     Products(icon = Icons.Filled.CurrencyExchange, displayText = "Productos", hidden = false),
+    Shops(icon = Icons.Filled.ShoppingBag, displayText = "Tiendas", hidden = false),
     About(
         icon = Icons.Filled.Info,
         displayText = "Sobre nosotros", hidden = false
     ),
     Product(displayText = "Producto"),
     AddPrice(displayText = "Agregar precio"),
-    AddProduct(displayText = "Agregar producto");
+    AddProduct(displayText = "Agregar producto"),
+    Shop(displayText = "Tienda"),
+    AddShop(displayText = "Agregar tienda");
 
     companion object {
         fun fromRoute(route: String?): Routes =

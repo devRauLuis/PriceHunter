@@ -70,6 +70,18 @@ class DbServiceImpl @Inject constructor() : DbService {
         return mappedResult
     }
 
+    override suspend fun updateShop(shop: Shop): Shop? {
+        Log.d(TAG, "updateShop: ${shop.toString()}")
+        val shopToUpdate =
+            shop.copy(updatedAt = Timestamp.now(), updatedBy = Firebase.auth.currentUser?.uid)
+
+        Firebase.firestore.collection(SHOPS_COLLECTION)
+            .document(shopToUpdate.id).set(shopToUpdate).await()
+        val mappedResult = getShop(shopToUpdate.id)?.let { return it }
+        Log.d(TAG, "saveShop: ${mappedResult.toString()}")
+        return mappedResult
+    }
+
     override suspend fun createProduct(product: Product): Product? {
         val productToCreate = product.copy(
             createdAt = Timestamp.now(),
@@ -80,6 +92,21 @@ class DbServiceImpl @Inject constructor() : DbService {
 
         val result = Firebase.firestore.collection(PRODUCTS_COLLECTION).add(productToCreate).await()
         val mappedResult = result.get().await().toObject<Product>()?.copy(id = result.id)
+
+        Log.d(TAG, "saveProduct: ${mappedResult.toString()}")
+        return mappedResult
+    }
+
+    override suspend fun createShop(shop: Shop): Shop? {
+        val shopToCreate = shop.copy(
+            createdAt = Timestamp.now(),
+            createdBy = Firebase.auth.currentUser?.uid,
+            updatedAt = Timestamp.now(),
+            updatedBy = Firebase.auth.currentUser?.uid
+        )
+
+        val result = Firebase.firestore.collection(SHOPS_COLLECTION).add(shopToCreate).await()
+        val mappedResult = result.get().await().toObject<Shop>()?.copy(id = result.id)
 
         Log.d(TAG, "saveProduct: ${mappedResult.toString()}")
         return mappedResult

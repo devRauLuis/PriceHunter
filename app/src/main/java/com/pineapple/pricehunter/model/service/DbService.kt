@@ -23,7 +23,9 @@ interface DbService {
     suspend fun getAllProducts(query: String? = ""): List<Product>
     suspend fun getProduct(id: String): Product?
     suspend fun updateProduct(product: Product): Product?
+    suspend fun updateShop(shop: Shop): Shop?
     suspend fun createProduct(product: Product): Product?
+    suspend fun createShop(shop: Shop): Shop?
 
     suspend fun getAllShops(query: String? = ""): List<Shop>
     suspend fun getShop(id: String): Shop?
