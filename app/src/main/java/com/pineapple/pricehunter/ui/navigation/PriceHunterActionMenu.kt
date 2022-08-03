@@ -42,12 +42,13 @@ fun PriceHunterActionMenu(
                     })
             }
         }
-        route.contains(Routes.Product.name) -> {
+
+        route.contains(Routes.Shops.name) -> {
             ActionMenu {
                 DropdownMenuItem(
-                    text = { Text("Agregar precio") },
+                    text = { Text("Agregar tienda") },
                     onClick = {
-                        navigate("${Routes.AddPrice.name}/${id}")
+                        navigate("${Routes.AddShop.name}/${id}")
                     },
                     leadingIcon = {
                         Icon(
